@@ -3,15 +3,17 @@ public class Fraction
     private int _top;
     private int _bottom;
 
-    public int Top {
-        get { return _top;}
-        set {_top = value;}
+    public void setBottom(int bottom)
+    {
+        _bottom = bottom;
     }
 
-    public int Bottom {
-        get {return _bottom;}
-        set {_bottom = value;}
+    public int getTop()
+    {
+        return _top;
     }
+
+    
 
     public Fraction()
     {
