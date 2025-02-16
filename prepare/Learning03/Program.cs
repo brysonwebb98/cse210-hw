@@ -22,6 +22,8 @@ class Program
         Console.WriteLine(f3.GetFractionString());
         Console.WriteLine($"Decimal Value: {f3.GetDecimalValue():F2}");
         Console.WriteLine("");
+
+
     }
 
     
