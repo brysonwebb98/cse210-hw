@@ -14,7 +14,6 @@ public partial class Program
         Console.WriteLine("5. Quit");
         Console.Write("Enter your choice (1-5): ");
     }
-
     static void WriteEntry(Journal journal, PromptGenerator promptGenerator)
     {
         string prompt = promptGenerator.GetRandomPrompt();
@@ -25,46 +24,54 @@ public partial class Program
         Entry newEntry = new Entry(DateTime.Now.ToString("yyyy-MM-dd h:mm tt"), prompt, content);
         journal.AddEntry(newEntry);
     }
-
     static void DisplayJournal(Journal journal)
     {
         journal.DisplayAllEntries();
     }
-
     static void LoadJournal(Journal journal)
     {
-        Console.WriteLine("If you would like to see your Journal, please enter the file name:");
-        string filePath = Console.ReadLine();
-        if (!File.Exists(filePath))
+    Console.WriteLine("If you would like to see your Journal, please enter the file name:");
+    string filePath = Console.ReadLine();
+    
+    if (!File.Exists(filePath))
+    {
+        Console.WriteLine("This file does not exist. Please check the file name again!");
+    }
+    else
+    {
+        if (journal.LoadFromFile(filePath))
         {
-            Console.WriteLine("This file does not exist. Please check the file name again!");
-        }
-        else
-        {
+            Console.Clear();
             Console.WriteLine("Journal loaded successfully!");
             string journalContent = File.ReadAllText(filePath);
-            Console.WriteLine($"Here is your journals content:\n{journalContent}");
-        }
-        Console.ReadKey(); // So that you can see the error message and know why its rerouting. 
-    }
-
-    static void SaveJournal(Journal journal)
-    {
-        Console.WriteLine("What is the filename?");
-        string filePath = Console.ReadLine();
-        if (!File.Exists(filePath))
-        {
-            Console.WriteLine("This file does not exist. Please check the file name again!");
-            Console.ReadKey();
+            Console.WriteLine(journalContent);
         }
         else
         {
-            journal.SaveToFile(filePath);
-            Console.WriteLine("Successfully Saved!");
-            Console.ReadKey();
+            Console.WriteLine("Error loading journal from file.");
         }
     }
+    Console.ReadKey();
+    }
+    static void SaveJournal(Journal journal)
+    {
+    Console.WriteLine("What is the filename?");
+    string filePath = Console.ReadLine();
 
+    if (File.Exists(filePath))
+    {
+        journal.SaveToFile(filePath);
+        Console.WriteLine("Successfully Saved to existing file!");
+    }
+    else
+    {
+        Console.WriteLine("File does not exist. A new file will be created.");
+        journal.SaveToFile(filePath);
+        Console.WriteLine("Successfully Saved to new file!");
+    }
+
+    Console.ReadKey();
+    }
     static void ExitProgram()
     {
         Console.WriteLine("Thank you for writing in your journal today! Below is the daily quote for you!");
@@ -73,7 +80,6 @@ public partial class Program
 
         Console.WriteLine(dailyQuote);
     }
-
     static void Main(string[] args)
     {
         bool quit = false;

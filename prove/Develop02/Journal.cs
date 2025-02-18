@@ -1,17 +1,14 @@
 public class Journal
 {
     private List<Entry> _entries;
-
     public Journal()
     {
         _entries = new List<Entry>();
     }
-
     public void AddEntry(Entry entry)
     {
         _entries.Add(entry);
     }
-
     public void DisplayAllEntries()
     {
         int numEntries = 1;
@@ -24,7 +21,6 @@ public class Journal
         }
         Console.ReadKey();
     }
-
     public bool SaveToFile(string filename)
     {
         try
@@ -33,12 +29,10 @@ public class Journal
             {
                 foreach (var entry in _entries)
                 {
-                    writer.WriteLine($"{entry.Date}|Prompt: {entry.Prompt}|Journal: {entry.Content}|");
+                    entry.SaveToFile(writer); 
                 }
             }
-
             _entries.Clear();
-
             return true;
         }
         catch
@@ -46,7 +40,6 @@ public class Journal
             return false;
         }
     }
-
     public bool LoadFromFile(string filename)
     {
         try
@@ -54,11 +47,10 @@ public class Journal
             var lines = File.ReadAllLines(filename);
             foreach (var line in lines)
             {
-                var parts = line.Split('|');
-                if (parts.Length == 3)
+                var entry = Entry.FromFileLine(line); 
+                if (entry != null)
                 {
-                    var entry = new Entry(parts[0], parts[1], parts[2]);
-                    _entries.Add(entry);
+                    Console.WriteLine("");
                 }
             }
             return true;
